@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AI Skin Analysis | HR07 Beauty Clinic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- SCREEN 1: Landing -->
+  <div id="screen-landing" class="screen active">
+    <div class="hero">
+      <div class="logo">HR07</div>
+      <h1>AI Skin Analysis</h1>
+      <p class="subtitle">Discover your skin age in 60 seconds</p>
+      <div class="hero-visual">
+        <div class="scan-ring"></div>
+        <div class="scan-icon">📸</div>
+      </div>
+      <p class="desc">Free AI-powered skin analysis by HR07 Beauty Clinic.<br>Get personalized skincare recommendations.</p>
+      <button id="btn-start" class="btn-primary">Start Free Analysis</button>
+      <p class="trust">🔒 Your photo is analyzed instantly and never stored</p>
+    </div>
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="vi">Tiếng Việt</button>
+      <button class="lang-btn" data-lang="zh">中文</button>
+      <button class="lang-btn" data-lang="en">English</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: Camera / Upload -->
+  <div id="screen-camera" class="screen">
+    <div class="camera-header">
+      <button id="btn-back" class="btn-icon">←</button>
+      <h2>Take a Selfie</h2>
+      <div></div>
+    </div>
+    <div class="camera-container">
+      <video id="camera-video" autoplay playsinline></video>
+      <canvas id="camera-canvas" style="display:none"></canvas>
+      <div class="face-guide">
+        <div class="face-oval"></div>
+        <p class="guide-text">Align your face within the oval</p>
+      </div>
+      <img id="preview-img" class="preview-img" style="display:none">
+    </div>
+    <div class="camera-tips">
+      <span>💡 Good lighting</span>
+      <span>👤 Face forward</span>
+      <span>🚫 No filters</span>
+    </div>
+    <div class="camera-actions">
+      <button id="btn-capture" class="btn-capture">
+        <div class="capture-ring"></div>
+      </button>
+      <label id="btn-upload-label" class="btn-upload-alt">
+        <input type="file" id="file-input" accept="image/*" style="display:none">
+        <span id="upload-text">📁 Upload</span>
+      </label>
+    </div>
+    <div id="retake-actions" class="camera-actions" style="display:none">
+      <button id="btn-retake" class="btn-secondary">Retake</button>
+      <button id="btn-analyze" class="btn-primary">Analyze My Skin →</button>
+    </div>
+    <div class="info-form" id="info-form">
+      <input type="text" id="input-name" placeholder="Your name (optional)">
+      <input type="number" id="input-age" placeholder="Your age" min="15" max="80">
+    </div>
+  </div>
+
+  <!-- SCREEN 3: Analyzing -->
+  <div id="screen-analyzing" class="screen">
+    <div class="analyzing-content">
+      <div class="analyzing-animation">
+        <div class="pulse-ring r1"></div>
+        <div class="pulse-ring r2"></div>
+        <div class="pulse-ring r3"></div>
+        <div class="analyzing-icon">🔬</div>
+      </div>
+      <h2>Analyzing Your Skin...</h2>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <p class="progress-text" id="progress-text">Detecting skin features...</p>
+      <div class="analysis-steps">
+        <div class="step" id="step-1">✓ Detecting skin type</div>
+        <div class="step" id="step-2">⏳ Analyzing wrinkles & fine lines</div>
+        <div class="step" id="step-3">⏳ Checking pores & texture</div>
+        <div class="step" id="step-4">⏳ Evaluating spots & pigmentation</div>
+        <div class="step" id="step-5">⏳ Calculating skin age</div>
+        <div class="step" id="step-6">⏳ Generating recommendations</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: Results -->
+  <div id="screen-results" class="screen">
+    <div class="results-header">
+      <h2>Your Skin Analysis</h2>
+      <p id="result-name" class="result-name"></p>
+    </div>
+
+    <!-- Skin Age Hero -->
+    <div class="skin-age-card">
+      <div class="age-comparison">
+        <div class="age-box actual">
+          <span class="age-label">Actual Age</span>
+          <span class="age-number" id="actual-age">—</span>
+        </div>
+        <div class="age-vs">vs</div>
+        <div class="age-box skin" id="skin-age-box">
+          <span class="age-label">Skin Age</span>
+          <span class="age-number" id="skin-age">—</span>
+        </div>
+      </div>
+      <p class="age-verdict" id="age-verdict"></p>
+    </div>
+
+    <!-- Radar Chart -->
+    <div class="chart-card">
+      <h3>Skin Health Scores</h3>
+      <canvas id="radar-chart" width="300" height="300"></canvas>
+      <div class="score-legend" id="score-legend"></div>
+    </div>
+
+    <!-- Issues Found -->
+    <div class="issues-card">
+      <h3>Issues Detected</h3>
+      <div class="issue-tags" id="issue-tags"></div>
+    </div>
+
+    <!-- AI Report -->
+    <div class="report-card">
+      <h3>📋 Personalized Report</h3>
+      <div class="report-text" id="report-text"></div>
+    </div>
+
+    <!-- Recommended Treatments -->
+    <div class="treatments-card">
+      <h3>💎 Recommended for You</h3>
+      <div class="treatments-list" id="treatments-list"></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-card">
+      <h3>Ready to transform your skin?</h3>
+      <p>Book a free consultation at HR07 Beauty Clinic</p>
+      <a href="https://zalo.me/0909000000" class="btn-zalo" id="btn-zalo">
+        💬 Chat on Zalo
+      </a>
+      <a href="https://line.me/ti/p/~hr07clinic" class="btn-line" id="btn-line" style="display:none">
+        💚 Add LINE
+      </a>
+      <p class="clinic-info">📍 District 3, Ho Chi Minh City | District 7, Phu My Hung</p>
+    </div>
+
+    <!-- Share -->
+    <div class="share-card">
+      <h3>Share your results</h3>
+      <p>Challenge your friends to discover their skin age!</p>
+      <div class="share-buttons">
+        <button id="btn-share" class="btn-share">📤 Share Result</button>
+        <button id="btn-retry" class="btn-secondary">🔄 Try Again</button>
+      </div>
+    </div>
+
+    <p class="disclaimer">⚠️ This analysis is for reference only and does not constitute medical diagnosis. Consult a dermatologist for professional advice.</p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
